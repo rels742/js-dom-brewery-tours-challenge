@@ -1,7 +1,7 @@
 // The 'Which state are you visiting?' form
 const stateForm = document.querySelector("#select-state-form");
 
-// targetting the ul for later use when creating dom elements and appending the li tot this variable.
+// Targetting the ul for later use when creating dom elements and appending the li tot this variable.
 const breweriesListEl = document.querySelector("#breweries-list");
 
 const apiURL = "https://api.openbrewerydb.org/breweries";
@@ -9,9 +9,24 @@ const apiURL = "https://api.openbrewerydb.org/breweries";
 // The state
 const state = {
   types: ["regional", "micro", "brewpub"],
+  // breweryType: "micro",
   usState: "",
   breweries: [],
 };
+
+// function breweryFilter(breweryType) {
+//   let breweriesByType = []
+
+//   // now spin through state.breweries and compare their type against breweryType
+//   // store the matches in a new (filtered) list of breweries of that type
+//   // render that filtered list
+
+//   state.breweries.forEach((brewery) =>
+//       if(breweryType === brewery.types) {
+//         breweriesByType.push(brewery)
+//       }
+//   );
+// }
 
 stateForm.addEventListener("submit", (event) => {
   console.log("my event", event, event.target);
@@ -26,10 +41,29 @@ stateForm.addEventListener("submit", (event) => {
     })
     .then((data) => {
       // console.log("my data", data);
-      state.breweries = data;
+      setBreweries(data);
       render();
     });
 });
+
+function setBreweries(allBreweries) {
+  const filteredBreweries = allBreweries.filter((brewery) =>
+    state.types.includes(brewery.brewery_type)
+  );
+
+  state.breweries = filteredBreweries;
+}
+
+// function breweryFilter(breweryType) {
+//   // now spin through state.breweries and compare their type against breweryType
+//   // store the matches in a new (filtered) list of breweries of that type
+//   // render that filtered list
+
+//   const breweriesByType = state.breweries.filter(
+//     (brewery) => breweryType === brewery.type
+//   );
+//   render(breweriesByType);
+// }
 
 // Render functions ...
 const renderBrewery = (brewery) => {
@@ -42,7 +76,7 @@ const renderBrewery = (brewery) => {
   liDiv.setAttribute("class", "type");
   liDiv.innerHTML = `${brewery.brewery_type}`;
 
-  //Address section
+  // Address section
   const liSection = document.createElement("section");
   liSection.setAttribute("class", "address");
 
@@ -55,7 +89,7 @@ const renderBrewery = (brewery) => {
   const liCityAndPostcodePStrong = document.createElement("strong");
   liCityAndPostcodePStrong.innerHTML = `${brewery.city}, ${brewery.postal_code} `;
 
-  //Phone section
+  // Phone section
   const liSectionTwo = document.createElement("section");
   liSectionTwo.setAttribute("class", "phone");
 
@@ -65,7 +99,7 @@ const renderBrewery = (brewery) => {
   const liSectionTwoP = document.createElement("p");
   liSectionTwoP.innerHTML = `${brewery.phone}`;
 
-  //Link website section
+  // Link website section
   const liSectionThree = document.createElement("section");
   liSectionThree.setAttribute("class", "link");
 
@@ -102,3 +136,5 @@ const renderBreweries = () => {
 function render() {
   renderBreweries();
 }
+
+// in fetch, get to check if it is one of the three types and if it is, then return those only
