@@ -1,6 +1,9 @@
 // The 'Which state are you visiting?' form
 const stateForm = document.querySelector("#select-state-form");
 
+// The type of brewery dropdown option form
+const selectTypeDropdown = document.querySelector("#filter-by-type");
+
 // Targetting the ul for later use when creating dom elements and appending the li tot this variable.
 const breweriesListEl = document.querySelector("#breweries-list");
 
@@ -9,24 +12,10 @@ const apiURL = "https://api.openbrewerydb.org/breweries";
 // The state
 const state = {
   types: ["regional", "micro", "brewpub"],
-  // breweryType: "micro",
+  breweryType: "",
   usState: "",
   breweries: [],
 };
-
-// function breweryFilter(breweryType) {
-//   let breweriesByType = []
-
-//   // now spin through state.breweries and compare their type against breweryType
-//   // store the matches in a new (filtered) list of breweries of that type
-//   // render that filtered list
-
-//   state.breweries.forEach((brewery) =>
-//       if(breweryType === brewery.types) {
-//         breweriesByType.push(brewery)
-//       }
-//   );
-// }
 
 stateForm.addEventListener("submit", (event) => {
   console.log("my event", event, event.target);
@@ -46,6 +35,20 @@ stateForm.addEventListener("submit", (event) => {
     });
 });
 
+selectTypeDropdown.addEventListener("change", (event) => {
+  state.breweryType = event.target.value;
+
+  render();
+
+  //create an event listener that targets the drop down.
+
+  //target value is the value of what the user has picked in the dropdown.
+
+  // data has already been fetched
+
+  // only render that specifc brewery type option
+});
+
 function setBreweries(allBreweries) {
   const filteredBreweries = allBreweries.filter((brewery) =>
     state.types.includes(brewery.brewery_type)
@@ -53,17 +56,6 @@ function setBreweries(allBreweries) {
 
   state.breweries = filteredBreweries;
 }
-
-// function breweryFilter(breweryType) {
-//   // now spin through state.breweries and compare their type against breweryType
-//   // store the matches in a new (filtered) list of breweries of that type
-//   // render that filtered list
-
-//   const breweriesByType = state.breweries.filter(
-//     (brewery) => breweryType === brewery.type
-//   );
-//   render(breweriesByType);
-// }
 
 // Render functions ...
 const renderBrewery = (brewery) => {
@@ -130,11 +122,16 @@ const clearBreweries = () => {
 const renderBreweries = () => {
   clearBreweries();
 
-  state.breweries.forEach((brewery) => renderBrewery(brewery));
+  state.breweries.forEach((brewery) => {
+    if (
+      state.breweryType === "" ||
+      state.breweryType === brewery.brewery_type
+    ) {
+      renderBrewery(brewery);
+    }
+  });
 };
 
 function render() {
   renderBreweries();
 }
-
-// in fetch, get to check if it is one of the three types and if it is, then return those only
