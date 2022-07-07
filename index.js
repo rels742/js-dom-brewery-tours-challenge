@@ -35,18 +35,11 @@ stateForm.addEventListener("submit", (event) => {
     });
 });
 
+//filters
 selectTypeDropdown.addEventListener("change", (event) => {
   state.breweryType = event.target.value;
 
   render();
-
-  //create an event listener that targets the drop down.
-
-  //target value is the value of what the user has picked in the dropdown.
-
-  // data has already been fetched
-
-  // only render that specifc brewery type option
 });
 
 function setBreweries(allBreweries) {
@@ -122,6 +115,7 @@ const clearBreweries = () => {
 const renderBreweries = () => {
   clearBreweries();
 
+  //filters
   state.breweries.forEach((brewery) => {
     if (
       state.breweryType === "" ||
